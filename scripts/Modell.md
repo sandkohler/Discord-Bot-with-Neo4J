@@ -21,7 +21,7 @@ CREATE (u)-[:SENT]->(d)
 CREATE (d)-[:CREATED]->(i)
 ```
 
-# Graphdatenmodell
+## Graphdatenmodell
 
 Das Graphdatenmodell in Neo4j ist die Gesamtheit aller Knoten, Beziehungen und deren Eigenschaften. Es ermöglicht eine intuitive und flexible Darstellung von Daten, die die Komplexität realer Systeme widerspiegelt. 
 
