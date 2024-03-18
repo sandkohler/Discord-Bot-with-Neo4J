@@ -52,7 +52,7 @@ async def generateimage(ctx):
 
 @bot.command()
 async def befehlliste(ctx):
-    await ctx.send("Liste der Befehle:\n !echo\n !generateimage\n (oder probiere es mal mit Hallo!")
+    await ctx.send("Liste der Befehle:\n !echo\n !generateimage\n !images\n !imageswithdescription\n (oder probiere es mal mit Hallo!)")
 
 
 @bot.command()
@@ -84,6 +84,47 @@ async def on_message(message):
         """, username=author, message=content)
 
     await bot.process_commands(message)
+
+
+@bot.command()
+async def images(ctx):
+    with driver.session() as session:
+        result = session.run("MATCH (i:Image) RETURN i.url AS url")
+        for record in result:
+            await ctx.send(record["url"])
+
+
+@bot.command()
+async def imageswithdescription(ctx):
+    with driver.session() as session:
+        result = session.run("""
+            MATCH (d:Description)-[:CREATED]->(i:Image)
+            RETURN d.description AS description, i.url AS url
+        """)
+        for record in result:
+            await ctx.send(f"Description: {record['description']}\nURL: {record['url']}")
+
+
+@bot.command()
+async def imagesfrom(ctx, username):
+    with driver.session() as session:
+        result = session.run("""
+            MATCH (u:User {name: $username})-[:SENT]->(:Description)-[:CREATED]->(i:Image)
+            RETURN i.url AS url
+        """, username=username)
+        for record in result:
+            await ctx.send(record["url"])
+
+
+@bot.command()
+async def updatedescription(ctx, image_url, new_description):
+    username = ctx.author.name
+    with driver.session() as session:
+        session.run("""
+            MATCH (u:User {name: $username})-[:SENT]->(d:Description)-[:CREATED]->(i:Image {url: $image_url})
+            SET d.description = $new_description
+        """, username=username, image_url=image_url, new_description=new_description)
+    await ctx.send("Die Beschreibung wurde aktualisiert.")
 
 
 bot.run("OTg5ODkzNDU3MTkzNjA3MjE4.GlAtJW.idiIWsyM0iXue08shed_FJOuyQNROHjDRDAdPY")
