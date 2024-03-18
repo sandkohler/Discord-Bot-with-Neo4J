@@ -36,10 +36,10 @@ Ersetze 'role' durch den Rollennamen und 'username' durch den Benutzernamen.
 
 Neo4j hat vier vordefinierte Rollen: 'admin', 'architect', 'publisher', 'editor' und 'reader'. Jede Rolle hat unterschiedliche Berechtigungen:  
 
-- admin: Hat Zugriff auf alle Funktionen und Daten.
-- architect: Kann das Schema ändern, hat aber keinen Zugriff auf Benutzer- und Rollenverwaltung.
-- publisher: Kann Daten lesen, schreiben und das Schema ändern.
-- editor: Kann Daten lesen und schreiben, kann aber das Schema nicht ändern.
-- reader: Kann nur Daten lesen.
+- **admin**: Hat Zugriff auf alle Funktionen und Daten.
+- **architect**: Kann das Schema ändern, hat aber keinen Zugriff auf Benutzer- und Rollenverwaltung.
+- **publisher**: Kann Daten lesen, schreiben und das Schema ändern.
+- **editor**: Kann Daten lesen und schreiben, kann aber das Schema nicht ändern.
+- **reader**: Kann nur Daten lesen.
 
 Du kannst auch benutzerdefinierte Rollen erstellen und ihnen spezifische Berechtigungen zuweisen.

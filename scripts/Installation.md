@@ -4,7 +4,7 @@ Neo4j Aura ist eine vollständig verwaltete Neo4j-Graphdatenbank, die in der Clo
 
 ## Erstellen einer Neo4j Aura-Datenbank
 
-1. Besuche die Neo4j Aura-Website.
+1. Besuche die Neo4j [Aura-Website](https://neo4j.com/).
 2. Klicke auf "Get started for free" und erstelle ein Konto, wenn du noch keines hast.
 3. Nachdem du dich angemeldet hast, klicke auf "Create a database".
 4. Wähle den gewünschten Plan und die Region aus und klicke auf "Create Database".
