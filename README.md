@@ -107,7 +107,7 @@ async def generateimage(ctx):
 
 Um das Bild zu generieren, wird die API von [EdenAI](https://www.edenai.run/) verwendet. Mit dieser API kann ein Bild generiert werden, welches auf einer Beschreibung basiert. Die Beschreibung wird in der Datenbank gespeichert und mit dem Bild verknüpft.
 
-In der Datenbank sehen die Beziehungen dann so aus:
+In der Datenbank sehen die Beziehungen dann so aus, wie im Bild unten. Der Benutzer ist der grüne Kreis mit einer SENT Beziehung zu einem roten Kreis, der Beschreibung und die Beschreibung hat eine CREATED Beziehung zu einem blauen Kreis, also dem Bild.
 
 ![DatenbankGraph](/images/DatenbankGraph.png)
 
