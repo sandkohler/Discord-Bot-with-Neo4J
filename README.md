@@ -106,3 +106,17 @@ async def generateimage(ctx):
 ```
 
 Um das Bild zu generieren, wird die API von [EdenAI](https://www.edenai.run/) verwendet. Mit dieser API kann ein Bild generiert werden, welches auf einer Beschreibung basiert. Die Beschreibung wird in der Datenbank gespeichert und mit dem Bild verknüpft.
+
+In der Datenbank sehen die Beziehungen dann so aus:
+
+![DatenbankGraph](/images/DatenbankGraph.png)
+
+Im Frontend, also in Discord selbst, sieht das dann so aus:
+
+![generateImage](images/!generateImage.png)
+
+So gebe ich zuerst den Command `!generateimage` ein, darauf antwortet der Bot mit der Nachricht "Gib den Prompt ein, um das Bild zu generieren:" 
+
+Danach gebe ich den Prompt ein, welcher die Beschreibung des Bildes ist. Der Bot antwortet dann mit dem generierten Bild und speichert die Beschreibung und das Bild in der Datenbank.
+
+![img.png](images/img.png)
