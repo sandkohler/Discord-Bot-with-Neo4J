@@ -52,7 +52,19 @@ async def generateimage(ctx):
 
 @bot.command()
 async def befehlliste(ctx):
-    await ctx.send("Liste der Befehle:\n !echo\n !generateimage\n !images\n !imageswithdescription\n (oder probiere es mal mit Hallo!)")
+    await ctx.send("""
+    Liste der Befehle:
+    - !echo [txt]: Gibt den eingegebenen Text zurück.
+    - !generateimage: Generiert ein Bild basierend auf dem eingegebenen Prompt.
+    - !images: Gibt alle gespeicherten Bilder zurück.
+    - !imageswithdescription: Gibt alle gespeicherten Bilder mit ihrer Beschreibung zurück.
+    - !imagesfrom [username]: Gibt alle Bilder zurück, die von einem bestimmten Benutzer gesendet wurden.
+    - !updatedescription [image_url] [new_description]: Aktualisiert die Beschreibung eines bestimmten Bildes.
+    - !joke: Gibt einen Witz zurück und speichert ihn in der Datenbank.
+    - !myjokes: Gibt alle Witze zurück, auf die der Benutzer reagiert hat.
+    - !removejoke [joke_id]: Entfernt die Verbindung des Benutzers zu einem bestimmten Witz.
+    (oder probiere es mal mit Hallo!)
+    """)
 
 
 @bot.command()
@@ -177,7 +189,7 @@ async def removejoke(ctx, joke_id: int):
         result = session.run("""
             MATCH (u:User {name: $username})-[r:REACTED_TO]->(j:Joke {id: $joke_id})
             DELETE r
-            RETURN count(r) as deleted_count
+            RETURN count(r) AS deleted_count
         """, username=username, joke_id=joke_id)
         deleted_count = result.single()["deleted_count"]
         if deleted_count > 0:
