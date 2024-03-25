@@ -127,4 +127,62 @@ async def updatedescription(ctx, image_url, new_description):
     await ctx.send("Die Beschreibung wurde aktualisiert.")
 
 
+@bot.command()
+async def joke(ctx):
+    url = "https://v2.jokeapi.dev/joke/Any?type=single"
+    response = requests.get(url)
+    joke = response.json()["joke"]
+    joke_id = response.json()["id"]
+
+    await ctx.send(joke)
+
+    with driver.session() as session:
+        session.run("""
+            MERGE (j:Joke {id: $joke_id, joke: $joke})
+        """, joke_id=joke_id, joke=joke)
+
+
+@bot.event
+async def on_reaction_add(reaction, user):
+    if user == bot.user:
+        return
+
+    joke_id = reaction.message.content
+    username = user.name
+
+    with driver.session() as session:
+        session.run("""
+            MERGE (u:User {name: $username}), (j:Joke {joke: $joke_id})
+            MERGE (u)-[:REACTED_TO]->(j)
+        """, username=username, joke_id=joke_id)
+
+
+@bot.command()
+async def myjokes(ctx):
+    username = ctx.author.name
+    with driver.session() as session:
+        result = session.run("""
+            MATCH (u:User {name: $username})-[:REACTED_TO]->(j:Joke)
+            RETURN j.id AS id, j.joke AS joke
+        """, username=username)
+        for record in result:
+            await ctx.send(f"ID: {record['id']}\nJoke: {record['joke']}")
+
+
+@bot.command()
+async def removejoke(ctx, joke_id: int):
+    username = ctx.author.name
+    with driver.session() as session:
+        result = session.run("""
+            MATCH (u:User {name: $username})-[r:REACTED_TO]->(j:Joke {id: $joke_id})
+            DELETE r
+            RETURN count(r) as deleted_count
+        """, username=username, joke_id=joke_id)
+        deleted_count = result.single()["deleted_count"]
+        if deleted_count > 0:
+            await ctx.send("Die Verbindung zum Witz wurde entfernt.")
+        else:
+            await ctx.send("Es wurde keine Verbindung zum Witz gefunden.")
+
+
 bot.run("OTg5ODkzNDU3MTkzNjA3MjE4.GlAtJW.idiIWsyM0iXue08shed_FJOuyQNROHjDRDAdPY")
