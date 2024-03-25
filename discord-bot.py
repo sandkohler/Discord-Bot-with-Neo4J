@@ -152,7 +152,8 @@ async def on_reaction_add(reaction, user):
 
     with driver.session() as session:
         session.run("""
-            MERGE (u:User {name: $username}), (j:Joke {joke: $joke_id})
+            MERGE (u:User {name: $username})
+            MERGE (j:Joke {joke: $joke_id})
             MERGE (u)-[:REACTED_TO]->(j)
         """, username=username, joke_id=joke_id)
 
