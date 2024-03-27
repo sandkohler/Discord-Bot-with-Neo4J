@@ -111,12 +111,34 @@ In der Datenbank sehen die Beziehungen dann so aus, wie im Bild unten. Der Benut
 
 ![DatenbankGraph](/images/DatenbankGraph.png)
 
-Im Frontend, also in Discord selbst, sieht das dann so aus:
+### Image Generation
+
+Im Frontend, also in Discord selbst, sieht die Bildgenerierung dann so aus:
 
 ![generateImage](images/!generateImage.png)
 
 So gebe ich zuerst den Command `!generateimage` ein, darauf antwortet der Bot mit der Nachricht "Gib den Prompt ein, um das Bild zu generieren:" 
 
-Danach gebe ich den Prompt ein, welcher die Beschreibung des Bildes ist. Der Bot antwortet dann mit dem generierten Bild und speichert die Beschreibung und das Bild in der Datenbank.
+Danach kann der Prompt eingegeben werden, welcher die Beschreibung des Bildes ist. Der Bot antwortet dann mit dem generierten Bild und speichert die Beschreibung und das Bild in der Datenbank.
 
 ![img.png](images/img.png)
+
+### Jokes
+
+Ein weiteres Feature, welches wir hinzugefügt haben, sind Witze. Mit dem Command `!joke` wird von der API [JokeAPI](https://jokeapi.dev/) ein Witz generiert und im Discord-Chat angezeigt.
+
+```python
+@bot.command()
+async def joke(ctx):
+    url = "https://v2.jokeapi.dev/joke/Any?type=single"
+    response = requests.get(url)
+    joke = response.json()["joke"]
+    joke_id = response.json()["id"]
+
+    await ctx.send(joke)
+
+    with driver.session() as session:
+        session.run("""
+            MERGE (j:Joke {id: $joke_id, joke: $joke})
+        """, joke_id=joke_id, joke=joke)
+```
