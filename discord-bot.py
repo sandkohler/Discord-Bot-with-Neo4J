@@ -63,6 +63,8 @@ async def befehlliste(ctx):
     - !joke: Gibt einen Witz zurück und speichert ihn in der Datenbank.
     - !myjokes: Gibt alle Witze zurück, auf die der Benutzer reagiert hat.
     - !removejoke [joke_id]: Entfernt die Verbindung des Benutzers zu einem bestimmten Witz.
+    - !jokebycategory [joke_category]: Gibt einen Witz einer bestimmten Kategorie zurück.
+      Kategorien: Any, Programming, Misc, Dark, Pun
     (oder probiere es mal mit Hallo!)
     """)
 
@@ -145,13 +147,33 @@ async def joke(ctx):
     response = requests.get(url)
     joke = response.json()["joke"]
     joke_id = response.json()["id"]
+    joke_category = response.json()["category"]
 
     await ctx.send(joke)
 
     with driver.session() as session:
         session.run("""
             MERGE (j:Joke {id: $joke_id, joke: $joke})
-        """, joke_id=joke_id, joke=joke)
+            MERGE (c:Category {name: $jokeCategory})
+            MERGE (j)-[:BELONGS_TO]->(c)
+        """, joke_id=joke_id, joke=joke, jokeCategory=joke_category)
+
+
+@bot.command()
+async def jokebycategory(ctx, joke_category):
+    url = "https://v2.jokeapi.dev/joke/" + joke_category + "?type=single"
+    response = requests.get(url)
+    joke = response.json()["joke"]
+    joke_id = response.json()["id"]
+
+    await ctx.send(joke)
+
+    with driver.session() as session:
+        session.run("""
+            MERGE (j:Joke {id: $joke_id, joke: $joke})
+            MERGE (c:Category {name: $jokeCategory})
+            MERGE (j)-[:BELONGS_TO]->(c)
+        """, joke_id=joke_id, joke=joke, jokeCategory=joke_category)
 
 
 @bot.event
