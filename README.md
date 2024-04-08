@@ -125,6 +125,8 @@ Danach kann der Prompt eingegeben werden, welcher die Beschreibung des Bildes is
 
 ### Jokes
 
+(Bitte alle Witze mit Humor nehmen 😉)
+
 Ein weiteres Feature, welches wir hinzugefügt haben, sind Witze. Mit dem Command `!joke` wird von der API [JokeAPI](https://jokeapi.dev/) ein Witz generiert und im Discord-Chat angezeigt.
 
 ```python
@@ -155,4 +157,6 @@ Entweder nutzt man dazu den Command `!jokebycategory` oder `!jokewithblacklist`,
 
 ![jokewithblacklist](images/jokewithblacklist.png)
 
-(Bitte alle Witze mit Humor nehmen 😉)
+In der Datenbank werden die Witze immer mit einer `BELONGS_TO` Beziehung zu einer Kategorie gespeichert.
+
+![DatenbankGraphJoke](images/jokesbycategorygraph.png)
