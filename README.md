@@ -121,7 +121,7 @@ So gebe ich zuerst den Command `!generateimage` ein, darauf antwortet der Bot mi
 
 Danach kann der Prompt eingegeben werden, welcher die Beschreibung des Bildes ist. Der Bot antwortet dann mit dem generierten Bild und speichert die Beschreibung und das Bild in der Datenbank.
 
-![img.png](images/img.png)
+![img.png](images/kircheAufEinemBergMitSonnenschein.png)
 
 ### Jokes
 
@@ -142,3 +142,17 @@ async def joke(ctx):
             MERGE (j:Joke {id: $joke_id, joke: $joke})
         """, joke_id=joke_id, joke=joke)
 ```
+
+Das funktioniert ganz einfach so:
+
+![joke](images/joke.png)
+
+Nun bekommt man einfach einen Witz zurück, diesen kann man Filtern.
+
+Entweder nutzt man dazu den Command `!jokebycategory` oder `!jokewithblacklist`, hier je ein Beispiel:
+
+![jokebycategory](images/jokebycategory.png)
+
+![jokewithblacklist](images/jokewithblacklist.png)
+
+(Bitte alle Witze mit Humor nehmen 😉)
