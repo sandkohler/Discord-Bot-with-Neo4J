@@ -25,9 +25,9 @@ async def generateimage(ctx):
         "attributes_as_list": False,
         "show_original_response": False,
         "num_images": 1,
-        "providers": "amazon",
-        "fallback_providers": "replicate",
-        "resolution": "1024x1024",
+        "providers": "replicate",
+        "fallback_providers": "amazon",
+        "resolution": "512x512",
         "text": description
     }
     headers = {
@@ -38,15 +38,16 @@ async def generateimage(ctx):
 
     response = requests.post(url, json=payload, headers=headers)
     image_url = response.json()["replicate"]["items"][0]["image_resource_url"]
+    cost = response.json()["replicate"]["cost"]
 
     with driver.session() as session:
         session.run("""
             MERGE (u:User {name: $username})
             CREATE (d:Description {description: $description})
-            CREATE (i:Image {url: $image_url})
+            CREATE (i:Image {url: $image_url, cost: $cost})
             CREATE (u)-[:SENT]->(d)
             CREATE (d)-[:CREATED]->(i)
-        """, username=ctx.author.name, description=description, image_url=image_url)
+        """, username=ctx.author.name, description=description, image_url=image_url, cost=cost)
 
     await ctx.send(image_url)
 
@@ -55,17 +56,28 @@ async def generateimage(ctx):
 async def befehlliste(ctx):
     await ctx.send("""
     Liste der Befehle:
+    
     - !echo [txt]: Gibt den eingegebenen Text zurück.
+    
     - !generateimage: Generiert ein Bild basierend auf dem eingegebenen Prompt.
+    
     - !images: Gibt alle gespeicherten Bilder zurück.
+    
     - !imageswithdescription: Gibt alle gespeicherten Bilder mit ihrer Beschreibung zurück.
+    
     - !imagesfrom [username]: Gibt alle Bilder zurück, die von einem bestimmten Benutzer gesendet wurden.
+    
     - !updatedescription [image_url] [new_description]: Aktualisiert die Beschreibung eines bestimmten Bildes.
+    
     - !joke: Gibt einen Witz zurück und speichert ihn in der Datenbank.
+    
     - !myjokes: Gibt alle Witze zurück, auf die der Benutzer reagiert hat.
+    
     - !removejoke [joke_id]: Entfernt die Verbindung des Benutzers zu einem bestimmten Witz.
+    
     - !jokebycategory [joke_category]: Gibt einen Witz einer bestimmten Kategorie zurück.
       Kategorien: Any, Programming, Misc, Dark, Pun
+      
     (oder probiere es mal mit Hallo!)
     """)
 
