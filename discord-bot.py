@@ -24,9 +24,10 @@ async def generateimage(ctx):
         "response_as_dict": True,
         "attributes_as_list": False,
         "show_original_response": False,
-        "resolution": "512x512",
-        "num_images": 2,
-        "providers": "replicate",
+        "num_images": 1,
+        "providers": "amazon",
+        "fallback_providers": "replicate",
+        "resolution": "1024x1024",
         "text": description
     }
     headers = {
