@@ -76,7 +76,10 @@ async def befehlliste(ctx):
     - !removejoke [joke_id]: Entfernt die Verbindung des Benutzers zu einem bestimmten Witz.
     
     - !jokebycategory [joke_category]: Gibt einen Witz einer bestimmten Kategorie zurück.
-      Kategorien: Any, Programming, Misc, Dark, Pun
+        Kategorien: Any, Programming, Misc, Dark, Pun
+      
+    - !jokewithblacklist [blacklist_flags]: Gibt einen Witz zurück, der nicht die angegebenen Flags enthält.
+        Flags: nsfw, religious, political, racist, sexist, explicit
       
     (oder probiere es mal mit Hallo!)
     """)
@@ -231,6 +234,25 @@ async def removejoke(ctx, joke_id: int):
             await ctx.send("Die Verbindung zum Witz wurde entfernt.")
         else:
             await ctx.send("Es wurde keine Verbindung zum Witz gefunden.")
+
+
+@bot.command()
+async def jokewithblacklist(ctx, *blacklist_flags):
+    blacklist = ','.join(blacklist_flags)
+    url = f"https://v2.jokeapi.dev/joke/Any?blacklistFlags={blacklist}&type=single"
+    response = requests.get(url)
+    joke = response.json()["joke"]
+    joke_id = response.json()["id"]
+    joke_category = response.json()["category"]
+
+    await ctx.send(joke)
+
+    with driver.session() as session:
+        session.run("""
+            MERGE (j:Joke {id: $joke_id, joke: $joke})
+            MERGE (c:Category {name: $jokeCategory})
+            MERGE (j)-[:BELONGS_TO]->(c)
+        """, joke_id=joke_id, joke=joke, jokeCategory=joke_category)
 
 
 bot.run("OTg5ODkzNDU3MTkzNjA3MjE4.GlAtJW.idiIWsyM0iXue08shed_FJOuyQNROHjDRDAdPY")
