@@ -80,6 +80,8 @@ async def befehlliste(ctx):
       
     - !jokewithblacklist [blacklist_flags]: Gibt einen Witz zurück, der nicht die angegebenen Flags enthält.
         Flags: nsfw, religious, political, racist, sexist, explicit
+        
+    - !myjokesbycategory [joke_category]: Gibt alle Witze einer bestimmten Kategorie zurück, auf die der Benutzer reagiert hat.
       
     (oder probiere es mal mit Hallo!)
     """)
@@ -255,4 +257,16 @@ async def jokewithblacklist(ctx, *blacklist_flags):
         """, joke_id=joke_id, joke=joke, jokeCategory=joke_category)
 
 
-bot.run("OTg5ODkzNDU3MTkzNjA3MjE4.GlAtJW.idiIWsyM0iXue08shed_FJOuyQNROHjDRDAdPY")
+@bot.command()
+async def myjokesbycategory(ctx, joke_category):
+    username = ctx.author.name
+    with driver.session() as session:
+        result = session.run("""
+            MATCH (u:User {name: $username})-[:REACTED_TO]->(j:Joke)-[:BELONGS_TO]->(c:Category {name: $joke_category})
+            RETURN j.id AS id, j.joke AS joke
+        """, username=username, joke_category=joke_category)
+        for record in result:
+            await ctx.send(f"ID: {record['id']}\nJoke: {record['joke']}")
+
+
+bot.run("abcdefghijklmnopqrstuvwxyz")
