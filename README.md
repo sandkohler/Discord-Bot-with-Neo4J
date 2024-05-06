@@ -160,3 +160,9 @@ Entweder nutzt man dazu den Command `!jokebycategory` oder `!jokewithblacklist`,
 In der Datenbank werden die Witze immer mit einer `BELONGS_TO` Beziehung zu einer Kategorie gespeichert.
 
 ![DatenbankGraphJoke](images/jokesbycategorygraph.png)
+
+## Reflexion
+
+Für mich war es das erste Python & Neo4j Projekt, also ich habe schon von Python gehört, aber noch nichts damit umgesetzt. Neo4j kannte ich bis zum NoSQL Modul nicht und musste ich wie Python auch neu lernen, dies hat mir aber sehr viel Spass gemacht, vor allem die verschiedene Commands auszuprobieren. Diese beiden Technologien mit Discord zu verbinden war eine gute Idee, da ich Discord oft privat nutze und mir es so Freude bereitet hat, als ich meinen eigenen Bot erstellte, den ich nutzen konnte. Insgesamt habe ich viel gelernt und bin ich sehr zufrieden mit dem Projekt.
+
+(Falls dir dieses Projekt gefällt, schau dir doch dieses Projekt an: [Twitch-Bot-with-Neo4J](https://github.com/LinusTimoDaniels/Twitch-Bot-with-Neo4J))
